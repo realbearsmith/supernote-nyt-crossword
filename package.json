@@ -6,6 +6,8 @@
   "author": "Ari Chivukula <ari.c@icloud.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.2.1",
+    "dotenv": "^16.0.3",
     "dropbox": "10.29.*",
     "moment": "2.29.*"
   },
