@@ -16,7 +16,7 @@ const CLIENT_AUTHORIZATION_ENDPOINT = "https://www.dropbox.com/oauth2/authorize"
 
 // Set the parameters for the OAuth 2.0 flow
 const params = new URLSearchParams();
-params.append("grant_type", "authorization_code");
+params.append("grant_type", "refresh_token");
 params.append("refresh_token", refreshToken);
 params.append("client_id", appKey);
 params.append("client_secret", appSecret);
