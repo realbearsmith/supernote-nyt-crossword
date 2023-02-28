@@ -3,7 +3,6 @@ const https = require('https');
 const moment = require('moment');
 const path = require('path');
 const process = require('process');
-require('dotenv').config()
 
 const dbx = new dropbox.Dropbox({
   clientId: process.env.DROPBOX_APP_KEY,
