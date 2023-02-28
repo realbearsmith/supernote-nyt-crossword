@@ -1,3 +1,6 @@
+// Install Dropbox SDK
+npm install dropbox@3.7.0
+
 // Create constants
 const dropbox = require('dropbox');
 const https = require('https');
