@@ -17,13 +17,15 @@ const dbx = new Dropbox({
 });
 
 // Use the object to get a new access token
-const oauth2Api = new Dropbox.DropboxOAuth2Api(dbx);
-oauth2Api.tokenFromOAuth1(REFRESH_TOKEN).then((accessToken) => {
-  dbx.setAccessToken(accessToken.result.access_token);
-  console.log('Access token:', accessToken.result.access_token);
-}).catch((error) => {
-  console.error(error);
-});
+dbx.auth
+  .tokenFromOAuth1({ oauth1_token_secret: REFRESH_TOKEN })
+  .then((response) => {
+    dbx.setAccessToken(response.result.access_token);
+    console.log('Access token:', response.result.access_token);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
 // Get NYT Crossword
 function getNYTC(date) {
