@@ -10,17 +10,19 @@ const dbx = new dropbox.Dropbox({
   refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
 });
 
-async function getAccessTokenFromRefreshToken() {
-  try {
-    const response = await dbx.oauth2Token({
-      grantType: 'refresh_token',
-      refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
-    });
-    return response.result.access_token;
-  } catch (error) {
-    console.error('Error refreshing access token:', error);
-    throw error;
-  }
+async function refreshAccessToken(refreshToken) {
+  const oauth2Client = new OAuth2(
+    process.env.DROPBOX_APP_KEY,
+    process.env.DROPBOX_APP_SECRET,
+    "https://www.dropbox.com/oauth2/authorize",
+    "https://api.dropbox.com/oauth2/token",
+    null
+  );
+
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
+  const { tokens } = await oauth2Client.refreshAccessToken();
+  dbx.setAccessToken(tokens.access_token); // Set the access token
+  return tokens.access_token;
 }
 
 function getNYTC(date) {
