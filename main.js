@@ -1,5 +1,3 @@
-npm install isomorphic-fetch --save
-
 // Create constants
 const Dropbox = require('dropbox').Dropbox;
 const https = require('https');
@@ -15,7 +13,6 @@ const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
 
 // Create Dropbox Auth object
 const dbx = new Dropbox({
-  fetch: fetch,
   clientId: APP_KEY,
   clientSecret: APP_SECRET,
 });
