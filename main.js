@@ -1,13 +1,36 @@
+// Create constants
 const dropbox = require('dropbox');
 const https = require('https');
 const moment = require('moment');
 const path = require('path');
 const process = require('process');
 
-const dbx = new dropbox.Dropbox({
-  accessToken: process.env.DROPBOX_ACCESS_TOKEN,
+// Implement Dropbox SDK
+<script src="https://unpkg.com/dropbox-sdk@3.7.0/dropbox-sdk.min.js"></script>
+
+// Import app key, secret, and refresh tokens
+const APP_KEY = process.env.DROPBOX_APP_KEY;
+const APP_SECRET = process.env.DROPBOX_APP_SECRET;
+const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
+
+// Create Dropbox Auth object
+const dbxAuth = new Dropbox.DropboxAuth({
+    clientId: APP_KEY,
+    clientSecret: APP_SECRET,
 });
 
+// Set refresh token for Auth
+dbxAuth.setRefreshToken(REFRESH_TOKEN);
+
+// Use refresh token to get access token and store as dbx
+dbxAuth.getAccessToken().then(function (accessToken) {
+  const dbx = new Dropbox.Dropbox({ accessToken: accessToken });
+    console.log('Access token:', accessToken);
+}).catch(function (error) {
+    console.error(error);
+});
+
+// Get NYT Crossword
 function getNYTC(date) {
   return new Promise((resolve, reject) => {
     const req = https.request({
@@ -42,6 +65,7 @@ function getNYTC(date) {
   });
 }
 
+// Download and then upload to Dropbox if not already uploaded
 async function nytc(date) {
   console.log(`Checking ${moment(date).format('YYYY-MM-DD')}'s crossword.`);
   try {
@@ -85,6 +109,7 @@ async function nytc(date) {
   }
 }
 
+// Get WSJ Crossword
 function getWSJC(date) {
   return new Promise((resolve, reject) => {
     const req = https.request({
@@ -115,6 +140,7 @@ function getWSJC(date) {
   });
 }
 
+// Download and then upload to dropbox if not already uploaded
 async function wsjc(date) {
   date.setDate(date.getDate());
   console.log(`Downloading ${moment(date).format('YYYY-MM-DD')}'s crossword.`);
