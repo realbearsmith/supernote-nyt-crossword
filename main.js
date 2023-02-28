@@ -1,3 +1,5 @@
+npm install isomorphic-fetch --save
+
 // Create constants
 const Dropbox = require('dropbox').Dropbox;
 const https = require('https');
