@@ -1,5 +1,5 @@
 // Create constants
-const dropbox = require('dropbox').dropbox;
+const Dropbox = require('dropbox').Dropbox;
 const https = require('https');
 const moment = require('moment');
 const path = require('path');
@@ -11,16 +11,17 @@ const APP_SECRET = process.env.DROPBOX_APP_SECRET;
 const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
 
 // Create Dropbox Auth object
-const dbxAuth = new dropbox({
+const dbx = new Dropbox({
+  fetch: require('isomorphic-fetch'),
   clientId: APP_KEY,
   clientSecret: APP_SECRET,
-  refreshToken: REFRESH_TOKEN,
 });
 
-// Use the auth object to get a new access token
-dbxAuth.getAccessToken().then((accessToken) => {
-  const dbx = new dropbox({ accessToken: accessToken });
-  console.log('Access token:', accessToken);
+
+// Use the object to get a new access token
+dbx.auth.getTokenFromOAuth1Token(REFRESH_TOKEN).then((accessToken) => {
+  dbx.setAccessToken(accessToken.result.access_token);
+  console.log('Access token:', accessToken.result.access_token);
 }).catch((error) => {
   console.error(error);
 });
