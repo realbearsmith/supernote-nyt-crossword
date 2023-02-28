@@ -3,27 +3,13 @@ const https = require('https');
 const moment = require('moment');
 const path = require('path');
 const process = require('process');
+require('dotenv').config()
 
 const dbx = new dropbox.Dropbox({
   clientId: process.env.DROPBOX_APP_KEY,
   clientSecret: process.env.DROPBOX_APP_SECRET,
   refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
 });
-
-async function refreshAccessToken(refreshToken) {
-  const oauth2Client = new OAuth2(
-    process.env.DROPBOX_APP_KEY,
-    process.env.DROPBOX_APP_SECRET,
-    "https://www.dropbox.com/oauth2/authorize",
-    "https://api.dropbox.com/oauth2/token",
-    null
-  );
-
-  oauth2Client.setCredentials({ refresh_token: refreshToken });
-  const { tokens } = await oauth2Client.refreshAccessToken();
-  dbx.setAccessToken(tokens.access_token); // Set the access token
-  return tokens.access_token;
-}
 
 function getNYTC(date) {
 
@@ -81,23 +67,15 @@ async function UploadCrossword(data, date) {
 }
 
 async function IsUploadedToDropbox(date) {
+
   try {
-    const metadata = await dbx.filesGetMetadata(
-      {
-        path: path.join(
-          process.env.DROPBOX_NYTC_PATH,
-          `${moment(date).format("YYYY-MM-DD-ddd")}-crossword.pdf`
-        ),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${dbx.accessToken}`,
-        },
-      }
-    );
-    return true;
-  } catch (e) {
-    console.error(e);
+    await dbx.filesGetMetadata({
+      path: path.join(process.env.DROPBOX_NYTC_PATH, `${moment(date).format('YYYY-MM-DD-ddd')}-crossword.pdf`),
+    });
+    return true
+  }
+  catch(e) {
+    console.error(e)
     return false;
   }
 }
