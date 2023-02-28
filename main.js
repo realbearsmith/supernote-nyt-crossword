@@ -1,6 +1,3 @@
-// Install Dropbox SDK
-npm install dropbox@3.7.0
-
 // Create constants
 const dropbox = require('dropbox');
 const https = require('https');
@@ -14,7 +11,7 @@ const APP_SECRET = process.env.DROPBOX_APP_SECRET;
 const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
 
 // Create Dropbox Auth object
-const dbxAuth = new Dropbox.DropboxAuth({
+const dbxAuth = new dropbox.DropboxAuth({
     clientId: APP_KEY,
     clientSecret: APP_SECRET,
 });
@@ -24,7 +21,7 @@ dbxAuth.setRefreshToken(REFRESH_TOKEN);
 
 // Use refresh token to get access token and store as dbx
 dbxAuth.getAccessToken().then(function (accessToken) {
-  const dbx = new Dropbox.Dropbox({ accessToken: accessToken });
+  const dbx = new dropbox.Dropbox({ accessToken: accessToken });
     console.log('Access token:', accessToken);
 }).catch(function (error) {
     console.error(error);
