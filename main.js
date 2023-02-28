@@ -4,6 +4,7 @@ const https = require('https');
 const moment = require('moment');
 const path = require('path');
 const process = require('process');
+const fetch = require('isomorphic-fetch');
 
 // Import app key, secret, and refresh tokens
 const APP_KEY = process.env.DROPBOX_APP_KEY;
@@ -12,7 +13,7 @@ const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
 
 // Create Dropbox Auth object
 const dbx = new Dropbox({
-  fetch: require('isomorphic-fetch'),
+  fetch: fetch,
   clientId: APP_KEY,
   clientSecret: APP_SECRET,
 });
