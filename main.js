@@ -5,9 +5,6 @@ const moment = require('moment');
 const path = require('path');
 const process = require('process');
 
-// Implement Dropbox SDK
-<script src="https://unpkg.com/dropbox-sdk@3.7.0/dropbox-sdk.min.js"></script>
-
 // Import app key, secret, and refresh tokens
 const APP_KEY = process.env.DROPBOX_APP_KEY;
 const APP_SECRET = process.env.DROPBOX_APP_SECRET;
