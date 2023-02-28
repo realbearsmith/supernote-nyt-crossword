@@ -1,5 +1,5 @@
 // Create constants
-const dropbox = require('dropbox');
+const dropbox = require('dropbox').dropbox;
 const https = require('https');
 const moment = require('moment');
 const path = require('path');
