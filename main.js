@@ -79,15 +79,16 @@ async function UploadCrossword(data, date) {
 }
 
 async function IsUploadedToDropbox(date) {
-
   try {
-    await dbx.filesGetMetadata({
+    const metadata = await dbx.filesGetMetadata({
       path: path.join(process.env.DROPBOX_NYTC_PATH, `${moment(date).format('YYYY-MM-DD-ddd')}-crossword.pdf`),
+      headers: {
+        Authorization: `Bearer ${dbx.getAccessToken()}`,
+      },
     });
-    return true
-  }
-  catch(e) {
-    console.error(e)
+    return true;
+  } catch (e) {
+    console.error(e);
     return false;
   }
 }
