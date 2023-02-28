@@ -11,7 +11,7 @@ const APP_SECRET = process.env.DROPBOX_APP_SECRET;
 const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
 
 // Create Dropbox Auth object
-const dbxAuth = new Dropbox({
+const dbxAuth = new dropbox({
   clientId: APP_KEY,
   clientSecret: APP_SECRET,
   refreshToken: REFRESH_TOKEN,
@@ -19,7 +19,7 @@ const dbxAuth = new Dropbox({
 
 // Use the auth object to get a new access token
 dbxAuth.getAccessToken().then((accessToken) => {
-  const dbx = new Dropbox({ accessToken: accessToken });
+  const dbx = new dropbox({ accessToken: accessToken });
   console.log('Access token:', accessToken);
 }).catch((error) => {
   console.error(error);
