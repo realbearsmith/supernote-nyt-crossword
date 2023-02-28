@@ -10,6 +10,19 @@ const dbx = new dropbox.Dropbox({
   refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
 });
 
+async function getAccessTokenFromRefreshToken() {
+  try {
+    const response = await dbx.oauth2Token({
+      grantType: 'refresh_token',
+      refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
+    });
+    return response.result.access_token;
+  } catch (error) {
+    console.error('Error refreshing access token:', error);
+    throw error;
+  }
+}
+
 function getNYTC(date) {
 
   console.log(`Checking ${moment(date).format('YYYY-MM-DD')}'s NYT crossword.`);
