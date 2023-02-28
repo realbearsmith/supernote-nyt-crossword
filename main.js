@@ -5,27 +5,40 @@ const moment = require('moment');
 const path = require('path');
 const process = require('process');
 
-// Import app key, secret, and refresh tokens
-const APP_KEY = process.env.DROPBOX_APP_KEY;
-const APP_SECRET = process.env.DROPBOX_APP_SECRET;
-const REFRESH_TOKEN = process.env.DROPBOX_REFRESH_TOKEN;
+// Set app key, app secret, and refresh token
+const appKey = process.env.DROPBOX_APP_KEY;
+const appSecret = process.env.DROPBOX_APP_SECRET;
+const refreshToken = process.env.DROPBOX_REFRESH_TOKEN;
 
-// Create Dropbox Auth object
-const dbx = new Dropbox({
-  clientId: APP_KEY,
-  clientSecret: APP_SECRET,
+// Set the Dropbox API endpoints
+const AUTH_ENDPOINT = "https://api.dropbox.com/oauth2/token";
+const CLIENT_AUTHORIZATION_ENDPOINT = "https://www.dropbox.com/oauth2/authorize";
+
+// Set the parameters for the OAuth 2.0 flow
+const params = new URLSearchParams();
+params.append("grant_type", "authorization_code");
+params.append("refresh_token", refreshToken);
+params.append("client_id", appKey);
+params.append("client_secret", appSecret);
+
+// Send a POST request to the Dropbox API to get a new access token
+fetch(AUTH_ENDPOINT, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: params
+})
+.then(response => response.json())
+.then(data => {
+    // Use the new access token to make API calls to Dropbox
+    const accessToken = data.access_token;
+    console.log("New access token: " + accessToken);
+})
+.catch(error => {
+    console.error("Error getting new access token from Dropbox: " + error);
 });
 
-// Use the object to get a new access token
-dbx.auth
-  .tokenFromOAuth1({ oauth1_token_secret: REFRESH_TOKEN })
-  .then((response) => {
-    dbx.setAccessToken(response.result.access_token);
-    console.log('Access token:', response.result.access_token);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
 
 // Get NYT Crossword
 function getNYTC(date) {
